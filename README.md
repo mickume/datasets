@@ -29,5 +29,5 @@ Example:
 ```shell
 source venv/bin/activate
 
-./bin/fandom.sh criticalrole
+./bin/fandom.sh criticalrole "mickume/fandom_criticalrole"
 ```

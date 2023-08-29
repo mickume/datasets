@@ -3,7 +3,6 @@
 # Example: create_dataset.sh criticalrole fandom_criticalrole
 
 base_dir='./datasets'
-org='mickume'
 
 # check if values are provided
 if [ $# -eq 0 ]; then
@@ -21,4 +20,4 @@ echo "Creating a dataset for: $dataset"
 dsc "$data_dir"
 
 # create a dataset and upload it to Huggingface
-python fandomwiki/create_dataset.py --path "$data_dir/data/" --repo "$repo" --user "$org"
+python fandomwiki/create_dataset.py --path "$data_dir/data/" --repo "$repo"

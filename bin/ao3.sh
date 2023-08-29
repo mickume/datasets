@@ -3,7 +3,6 @@
 # Example: ao3.sh "Harry Potter" ao3_harrypotter ao3_harrypotter 
 
 base_dir='./datasets'
-org='mickume'
 pages=3
 
 # check if values are provided
@@ -26,4 +25,4 @@ aoc $data_dir input.txt
 dsc "$data_dir"
 
 # create a dataset and upload it to Huggingface
-python fandomwiki/create_dataset.py --path "$data_dir/data/" --repo "$repo" --user "$org"
+python fandomwiki/create_dataset.py --path "$data_dir/data/" --repo "$repo"

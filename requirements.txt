@@ -1,0 +1,15 @@
+# fandom dependencies
+bs4>=0.0.1
+requests>=2.31.0
+argparse>=1.4.0
+webdriver-manager>=3.8.5
+selenium>=4.8.2
+lxml==4.9.2
+#wikiextractor>=3.0
+git+https://github.com/mickume/wikiextractor@master
+tqdm>=4.66
+markdownify>=0.11
+
+# dataset creation
+datasets>=2.14
+huggingface_hub>=0.16

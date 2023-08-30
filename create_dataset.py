@@ -1,6 +1,7 @@
 import os
 import logging
 import argparse
+
 import datasets
 
 
@@ -26,8 +27,10 @@ def create_dataset(path: str, repo: str) -> None:
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--repo', required=True, help='Name of the Huggingface repo') 
-    parser.add_argument('--path', required=True, help='Directory with the data files')
+    parser.add_argument('--repo', required=True,
+                        help='Name of the Huggingface repo')
+    parser.add_argument('--path', required=True,
+                        help='Directory with the data files')
     args = parser.parse_args()
 
     create_dataset(args.path, args.repo)

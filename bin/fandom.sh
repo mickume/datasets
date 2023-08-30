@@ -27,7 +27,7 @@ python fandomwiki/fandom_wiki_markdown.py "$data_dir/$fandom/" "$data_dir/raw/"
 dsc "$data_dir"
 
 # create a dataset and upload it to Huggingface
-python fandomwiki/create_dataset.py --path "$data_dir/data/" --repo "$repo"
+python create_dataset.py --path "$data_dir/data/" --repo "$repo"
 
 # cleanup temp files
 rm -rf "$data_dir/tmp"

@@ -20,4 +20,4 @@ echo "Creating a dataset for: $dataset"
 dsc "$data_dir"
 
 # create a dataset and upload it to Huggingface
-python fandomwiki/create_dataset.py --path "$data_dir/data/" --repo "$repo"
+python create_dataset.py --path "$data_dir/data/" --repo "$repo"

@@ -13,3 +13,4 @@ markdownify>=0.11
 # dataset creation
 datasets>=2.14
 huggingface_hub>=0.16
+transformers

@@ -78,3 +78,14 @@ dsc datasets/alt_potterverse/
 python create_dataset.py --path "datasets/alt_potterverse/data/" --repo "mickume/alt_potterverse"
 ```
 
+All the above in one command:
+
+```shell
+clear && \
+aos datasets/alt_potterverse/input.txt "Hermione Granger*s*Draco Malfoy" 10 && \
+aos datasets/alt_potterverse/input.txt "Dark Hermione Granger" 10 && \
+aos datasets/alt_potterverse/input.txt "Harry Potter" 5 && \
+aoc datasets/alt_potterverse/ input.txt && \
+dsc datasets/alt_potterverse/ && \
+python create_dataset.py --path "datasets/alt_potterverse/data/" --repo "mickume/alt_potterverse"
+```

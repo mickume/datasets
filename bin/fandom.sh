@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Example: fandom.sh harrypotter fandom_harrypotter
+# Example: ./bin/fandom.sh harrypotter fandom_harrypotter
 
 base_dir='./datasets'
 

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Example: ao3.sh "Harry Potter" ao3_harrypotter ao3_harrypotter 
+# Example: ./bin/ao3.sh "Harry Potter" small_harrypotter harry_potter_small 
 
 base_dir='./datasets'
-pages=3
+pages=5
 
 # check if values are provided
 if [ $# -eq 0 ]; then

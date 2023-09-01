@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Example: create_dataset.sh criticalrole fandom_criticalrole
+# Example: ./bin/create_dataset.sh criticalrole fandom_criticalrole
 
 base_dir='./datasets'
 

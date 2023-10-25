@@ -40,8 +40,8 @@ Example:
 # search and download stories for tag 'Harry Potter'
 ./bin/ao3.sh "Harry Potter" small_harrypotter harry_potter_small
 
-# create a tokinized dataset for the model training
-./bin/prepare_dataset.sh 'bigscience/bloom-3b' 'mickume/harry_potter_small'
+# create a dataset and upload it to Huggingface
+python create_dataset.py --path "datasets/small_harrypotter/data/" --repo "mickume/small_harrypotter"
 
 ```
 
@@ -53,18 +53,18 @@ First collect a list of stories from different fandoms or tags and combine them 
 
 ```shell
 
-# 10 pages/200 stories of 'Hermione Granger + Draco Malfoy'
+# 10 pages/200 stories with tag 'Hermione Granger + Draco Malfoy'
 aos datasets/alt_potterverse/input.txt "Hermione Granger*s*Draco Malfoy" 10
 
-# 10 pages/200 stories of 'Dark Hermione Granger'
+# 10 pages/200 stories with tag 'Dark Hermione Granger'
 aos datasets/alt_potterverse/input.txt "Dark Hermione Granger" 10
 
-# 5 pages/100 stories of 'Harry Potter'
+# 5 pages/100 stories with tag 'Harry Potter'
 aos datasets/alt_potterverse/input.txt "Harry Potter" 5
 
 ```
 
-Now crawl AO3 and create the dataset:
+Now retrieve the text and create the dataset:
 
 ```shell
 
@@ -89,9 +89,3 @@ aoc datasets/alt_potterverse/ input.txt && \
 dsc datasets/alt_potterverse/ && \
 python create_dataset.py --path "datasets/alt_potterverse/data/" --repo "mickume/alt_potterverse"
 ```
-
-Create a tokinzed version of the dataset
-
-```shell
-./bin/prepare_dataset.sh 'bigscience/bloom-3b' 'mickume/alt_potterverse'
-``

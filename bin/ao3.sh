@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Example: ./bin/ao3.sh "Harry Potter" small_harrypotter harry_potter_small 
+# Example: ./bin/ao3.sh "Harry Potter" test test
 
-base_dir='./datasets'
+base_dir='./data'
 pages=5
 
 # check if values are provided
@@ -12,17 +12,17 @@ if [ $# -eq 0 ]; then
 fi
 
 tag="$1"
-data_dir="$base_dir/$2"
+namespace="$2"
 repo="$3"
 
 # search for story ids
-aos "$data_dir/input.txt" "$tag" $pages
+aos "$base_dir/$namespace/input.txt" "$tag" $pages
 
 # retrieve the stories
-aoc $data_dir input.txt
+aoc $base_dir $namespace input.txt
 
 # cleanup raw files 
-dsc "$data_dir"
+dsc $base_dir $namespace input.txt
 
 # create a dataset and upload it to Huggingface
-python create_dataset.py --path "$data_dir/data/" --repo "$repo"
+python create_dataset.py --path "$base_dir/$namespace/data/" --repo "$repo"

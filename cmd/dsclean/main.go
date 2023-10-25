@@ -37,39 +37,46 @@ var (
 )
 
 func main() {
-	if len(os.Args) < 2 {
+	if len(os.Args) < 4 {
 		log.Fatal(fmt.Errorf("invalid arguments"))
 	}
 
-	output := os.Args[1]
-	length := 15
+	min_length := 15
+	base_dir := os.Args[1]
+	namespace := os.Args[2]
+	input_file := os.Args[3]
 
-	if err := CleanupFiles(output, length); err != nil {
+	if base_dir == "." {
+		path, err := os.Getwd()
+		if err != nil {
+			log.Fatal(err)
+		}
+		base_dir = path
+	}
+	if !strings.HasPrefix(input_file, "/") {
+		input_file = filepath.Join(base_dir, namespace, input_file)
+	}
+
+	file, err := os.Open(input_file)
+	if err != nil {
 		log.Fatal(err)
 	}
-}
-
-func CleanupFiles(output string, length int) error {
-
-	// scan the dir for files to cleanup
-
-	files, err := os.ReadDir(fmt.Sprintf("%s/raw", output))
-	if err != nil {
-		return err
-	}
+	defer file.Close()
 
 	num := 0
 	var l int64
-	for _, f := range files {
-		fname := f.Name()
-		if strings.HasSuffix(fname, ".txt") {
-			id := strings.Split(fname, ".")[0]
-			source := fmt.Sprintf("%s/raw/%s", output, fname)
-			target := fmt.Sprintf("%s/data/%s.txt", output, id)
 
-			n, err := CleanAndRewrite(source, target, length)
+	// read id's from the input file, clean & move the files
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		id := strings.TrimSpace(scanner.Text())
+		if len(id) > 0 && !strings.HasPrefix(id, "#") {
+			source := fmt.Sprintf("%s/.cache/%s.txt", base_dir, id)
+			target := fmt.Sprintf("%s/%s/data/%s.txt", base_dir, namespace, id)
+
+			n, err := cleanAndRewrite(source, target, min_length)
 			if err != nil {
-				return err
+				log.Fatal(err)
 			}
 
 			l = l + int64(n)
@@ -77,13 +84,11 @@ func CleanupFiles(output string, length int) error {
 		}
 	}
 
-	b, u := FormatBytes(l)
+	b, u := formatBytes(l)
 	fmt.Printf("Cleaned %d files. Total length=%d%s.\n", num, b, u)
-
-	return nil
 }
 
-func CleanAndRewrite(source, target string, length int) (int, error) {
+func cleanAndRewrite(source, target string, length int) (int, error) {
 	n := 0  // chars written
 	lc := 0 // line count
 
@@ -92,7 +97,7 @@ func CleanAndRewrite(source, target string, length int) (int, error) {
 		return 0, err
 	}
 
-	dst, err := Create(target)
+	dst, err := create(target)
 	if err != nil {
 		return 0, err
 	}
@@ -108,7 +113,7 @@ func CleanAndRewrite(source, target string, length int) (int, error) {
 	sc := 0
 
 	for scanner.Scan() {
-		line, l, skipped := CleanString(scanner.Text(), length)
+		line, l, skipped := cleanString(scanner.Text(), length)
 
 		if !skipped {
 			writer.WriteString(fmt.Sprintf("%s%s", line, endOfLine))
@@ -130,7 +135,7 @@ func CleanAndRewrite(source, target string, length int) (int, error) {
 	return n, nil
 }
 
-func CleanString(s string, length int) (string, int, bool) {
+func cleanString(s string, length int) (string, int, bool) {
 	line := strings.Trim(s, " ")
 
 	if len(line) == 0 {
@@ -170,7 +175,7 @@ func CleanString(s string, length int) (string, int, bool) {
 	return line, len(line), len(line) < length
 }
 
-func Create(path string) (*os.File, error) {
+func create(path string) (*os.File, error) {
 
 	dir := filepath.Dir(path)
 	if _, err := os.Stat(dir); errors.Is(err, os.ErrNotExist) {
@@ -183,7 +188,7 @@ func Create(path string) (*os.File, error) {
 	return os.Create(path)
 }
 
-func FormatBytes(l int64) (int64, string) {
+func formatBytes(l int64) (int64, string) {
 	unit := "b"
 
 	if l < 10*1024 {

@@ -20,26 +20,27 @@ const (
 	API_MAX_DELAY   = 10
 )
 
-// aoc <output_dir> <input_file>
-// Example: aoc datasets/ao3_harrypotter input.txt
+// aoc <base_dir> <dataset> <input_file>
+// Example: aoc data small_harrypotter input.txt
 func main() {
 
-	if len(os.Args) < 3 {
+	if len(os.Args) < 4 {
 		log.Fatal(fmt.Errorf("invalid arguments"))
 	}
 
-	output_dir := os.Args[1]
-	input_file := os.Args[2]
+	base_dir := os.Args[1]
+	namespace := os.Args[2]
+	input_file := os.Args[3]
 
-	if output_dir == "." {
+	if base_dir == "." {
 		path, err := os.Getwd()
 		if err != nil {
 			log.Fatal(err)
 		}
-		output_dir = path
+		base_dir = path
 	}
 	if !strings.HasPrefix(input_file, "/") {
-		input_file = filepath.Join(output_dir, input_file)
+		input_file = filepath.Join(base_dir, namespace, input_file)
 	}
 
 	dedupe(input_file)
@@ -55,18 +56,18 @@ func main() {
 	for scanner.Scan() {
 		id := strings.TrimSpace(scanner.Text())
 		if len(id) > 0 && !strings.HasPrefix(id, "#") {
-			if err := crawl(id, output_dir); err != nil {
+			if err := crawl(base_dir, id); err != nil {
 				log.Fatal(err)
 			}
 		}
 	}
 }
 
-func crawl(id, path string) error {
-	output := fmt.Sprintf("%s/raw/%s.txt", path, id)
+func crawl(path, id string) error {
+	full_file_name := fmt.Sprintf("%s/.cache/%s.txt", path, id)
 
-	if _, err := os.Stat(output); errors.Is(err, os.ErrNotExist) {
-		if err := fetch(id, output); err != nil {
+	if _, err := os.Stat(full_file_name); errors.Is(err, os.ErrNotExist) {
+		if err := fetch(full_file_name, id); err != nil {
 			return err
 		}
 		randomPause(API_MAX_DELAY)
@@ -75,8 +76,8 @@ func crawl(id, path string) error {
 	return nil
 }
 
-func fetch(id, output string) error {
-	f, err := create(output)
+func fetch(file_name, id string) error {
+	f, err := create(file_name)
 	if err != nil {
 		return err
 	}
@@ -96,11 +97,11 @@ func fetch(id, output string) error {
 	return c.Visit(url)
 }
 
-func dedupe(input string) error {
+func dedupe(input_file string) error {
 
-	dir := filepath.Dir(input)
+	dir := filepath.Dir(input_file)
 	tempFile := filepath.Join(dir, "input.temp")
-	if err := os.Rename(input, tempFile); err != nil {
+	if err := os.Rename(input_file, tempFile); err != nil {
 		return err
 	}
 
@@ -109,7 +110,7 @@ func dedupe(input string) error {
 		return err
 	}
 
-	nf, err := create(input)
+	nf, err := create(input_file)
 	if err != nil {
 		return err
 	}

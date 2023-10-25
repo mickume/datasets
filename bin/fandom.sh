@@ -2,7 +2,7 @@
 
 # Example: ./bin/fandom.sh harrypotter fandom_harrypotter
 
-base_dir='./datasets'
+base_dir='./data'
 
 # check if values are provided
 if [ $# -eq 0 ]; then

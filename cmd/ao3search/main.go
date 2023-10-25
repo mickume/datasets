@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	MAX_PAGES     = 50 // FIXME is this a reasonable upper limit?
+	MAX_PAGES     = 25
 	API_MAX_DELAY = 10
 
 	QS = "/works?commit=Sort+and+Filter&page=%d&work_search[complete]=T&work_search[crossover]=&work_search[date_from]=&work_search[date_to]=&work_search[excluded_tag_names]=&work_search[language_id]=%s&work_search[other_tag_names]=&work_search[query]=&work_search[sort_column]=revised_at&work_search[words_from]=%d&work_search[words_to]="
@@ -31,8 +31,8 @@ func main() {
 		log.Fatal(fmt.Errorf("invalid arguments"))
 	}
 
-	output := os.Args[1]
-	tagId := os.Args[2]
+	output_file := os.Args[1]
+	tags := os.Args[2]
 
 	if len(os.Args) == 4 {
 		p, _ := strconv.Atoi(os.Args[3])
@@ -45,7 +45,7 @@ func main() {
 	for i <= page {
 		fmt.Printf("Retrieving IDs on page %d\n", i)
 
-		n, err := search(queryString(tagId, "en", 5000, i), output)
+		n, err := search(queryString(tags, "en", 5000, i), output_file)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -125,6 +125,6 @@ func createPath(path string) error {
 	return nil
 }
 
-func queryString(tagId, language string, wordsFrom, page int) string {
-	return "https://archiveofourown.org/tags/" + strings.ReplaceAll(tagId, " ", "%20") + fmt.Sprintf(QS, page, language, wordsFrom)
+func queryString(tags, language string, wordsFrom, page int) string {
+	return "https://archiveofourown.org/tags/" + strings.ReplaceAll(tags, " ", "%20") + fmt.Sprintf(QS, page, language, wordsFrom)
 }

@@ -89,3 +89,9 @@ aoc datasets/alt_potterverse/ input.txt && \
 dsc datasets/alt_potterverse/ && \
 python create_dataset.py --path "datasets/alt_potterverse/data/" --repo "mickume/alt_potterverse"
 ```
+
+Create a tokinzed version of the dataset
+
+```shell
+./bin/prepare_dataset.sh 'bigscience/bloom-3b' 'mickume/alt_potterverse'
+``

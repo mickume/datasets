@@ -17,8 +17,5 @@ repo="$2_tk"
 
 echo "Creating a dataset for: $dataset"
 
-# cleanup raw files 
-dsc "$data_dir"
-
 # create a tokenized dataset and upload it to Huggingface
 python prepare_dataset.py --model "$model" --repo "$repo" --dataset "$dataset"

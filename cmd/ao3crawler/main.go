@@ -51,6 +51,8 @@ func main() {
 	}
 	defer file.Close()
 
+	fmt.Println("Start retrieving content ...")
+
 	// read id's from the input file and retrieve the texts
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -90,7 +92,7 @@ func fetch(file_name, id string) error {
 	})
 
 	c.OnRequest(func(r *colly.Request) {
-		fmt.Println("Retrieving ", r.URL)
+		fmt.Printf("Retrieving content: %s\n", r.URL)
 	})
 
 	url := fmt.Sprintf("https://archiveofourown.org/works/%s?view_full_work=true&view_adult=true", id)

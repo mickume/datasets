@@ -43,7 +43,7 @@ func main() {
 
 	ids := 0
 	for i <= page {
-		fmt.Printf("Retrieving IDs on page %d\n", i)
+		fmt.Printf("[%d/%d]: Retrieving story ids for '%s'\n", i, page, tags)
 
 		n, err := search(queryString(tags, "en", 5000, i), output_file)
 		if err != nil {

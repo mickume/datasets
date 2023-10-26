@@ -66,6 +66,8 @@ func main() {
 	num := 0
 	var l int64
 
+	fmt.Println("Start cleaning content ...")
+
 	// read id's from the input file, clean & move the files
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
